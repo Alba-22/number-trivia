@@ -4,7 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:number_trivia/core/usecases/usecase.dart';
 import 'package:number_trivia/modules/number_trivia/domain/entities/number_trivia_entity.dart';
 import 'package:number_trivia/modules/number_trivia/domain/repositories/number_trivia_repository.dart';
-import 'package:number_trivia/modules/number_trivia/domain/usecases/get_concrete_number_trivia_usecase.dart';
+import 'package:number_trivia/modules/number_trivia/domain/usecases/get_random_number_trivia_usecase.dart';
 
 class MockNumberTriviaRepository extends Mock implements NumberTriviaRepository {}
 
@@ -14,24 +14,23 @@ void main() {
 
   setUp(() {
     mockNumberTriviaRepository = MockNumberTriviaRepository();
-    usecase = GetConcreteNumberTriviaUsecase(mockNumberTriviaRepository);
+    usecase = GetRandomNumberTriviaUsecase(mockNumberTriviaRepository);
   });
 
-  const tNumber = 1;
-  const tNumberTrivia = NumberTriviaEntity(text: "Cool number", number: tNumber);
+  const tNumberTrivia = NumberTriviaEntity(text: "Cool number", number: 1);
 
   test(
-    "Should get trivia for the number from the repository",
+    "Should get trivia from the repository",
     () async {
       // Arrange
-      when(() => mockNumberTriviaRepository.getConcreteNumberTrivia(any())).thenAnswer((_) async => const Right(tNumberTrivia));
+      when(() => mockNumberTriviaRepository.getRandomNumberTrivia()).thenAnswer((_) async => const Right(tNumberTrivia));
 
       // Act
-      final result = await usecase(const Params(number: tNumber));
+      final result = await usecase(NoParams());
 
       // Assert
       expect(result, const Right(tNumberTrivia));
-      verify(() => mockNumberTriviaRepository.getConcreteNumberTrivia(tNumber));
+      verify(() => mockNumberTriviaRepository.getRandomNumberTrivia());
       verifyNoMoreInteractions(mockNumberTriviaRepository);
     },
   );
