@@ -50,7 +50,7 @@ void main() {
         final call = datasource.getLastNumberTrivia;
 
         // Assert
-        expect(() => call(), throwsA(const TypeMatcher<CacheException>()));
+        expect(() => call(), throwsA(isA<CacheException>()));
       },
     );
   });
