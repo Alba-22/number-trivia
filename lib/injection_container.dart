@@ -15,7 +15,7 @@ import 'package:number_trivia/modules/number_trivia/presentation/bloc/number_tri
 
 final sl = GetIt.I;
 
-void init() {
+Future<void> init() async {
   //! Modules - Number Trivia
   // Bloc
   sl.registerFactory(() => NumberTriviaBloc(sl.get(), sl.get(), sl.get()));
@@ -42,7 +42,8 @@ void init() {
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl.get()));
 
   //! External
-  sl.registerLazySingletonAsync<SharedPreferences>(() async => await SharedPreferences.getInstance());
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => http.Client());
   sl.registerLazySingleton(() => InternetConnectionChecker());
 }
